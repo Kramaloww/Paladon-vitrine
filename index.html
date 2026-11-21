@@ -1,0 +1,927 @@
+<!doctype html>
+<html lang="fr" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Paladon, le copilote du quotidien qui reste chez vous</title>
+  <meta name="description" content="Finances, placements, actualités, tâches et alertes réunis dans une seule application, installée sur votre propre machine et épaulée par une IA locale.">
+  <meta name="referrer" content="no-referrer">
+  <link rel="alternate" hreflang="fr" href="index.html">
+  <link rel="alternate" hreflang="en" href="en/index.html">
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="preload" href="assets/fonts/outfit-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/fonts/outfit-latin-600-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <script src="assets/js/theme-init.js"></script>
+  <link rel="stylesheet" href="assets/css/theme.css">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <script src="assets/js/main.js" defer></script>
+</head>
+<body>
+
+<!-- Pictogrammes (traits fins, couleur du texte courant). Réutilisés plus bas avec <use>. -->
+<svg class="sprite" aria-hidden="true" focusable="false">
+  <symbol id="i-wallet" viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="13" rx="4"/><path d="M3 10h18M16 14.5h1.5"/></symbol>
+  <symbol id="i-bars" viewBox="0 0 24 24"><path d="M5 19V11M12 19V5M19 19v-6"/></symbol>
+  <symbol id="i-chart" viewBox="0 0 24 24"><path d="M4 18l5-6 4 3 7-9"/><path d="M4 21h16"/></symbol>
+  <symbol id="i-paper" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="5"/><path d="M8 15l3-3 2 2 3-4"/></symbol>
+  <symbol id="i-tax" viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="4"/><path d="M9 8h6M9 12h6M9 16h3"/></symbol>
+  <symbol id="i-chat" viewBox="0 0 24 24"><path d="M5 5h14a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-8l-5 4v-4H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z"/></symbol>
+  <symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="8" height="8" rx="3"/><rect x="13" y="3" width="8" height="5" rx="2.5"/><rect x="13" y="10" width="8" height="11" rx="3"/><rect x="3" y="13" width="8" height="8" rx="3"/></symbol>
+  <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M5.3 18.7l1.4-1.4M17.3 6.7l1.4-1.4"/></symbol>
+  <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 0 1 9.5 4 8 8 0 1 0 20 14.5z"/></symbol>
+  <symbol id="i-news" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="4"/><path d="M7 9h6M7 12.5h10M7 16h10"/></symbol>
+  <symbol id="i-tasks" viewBox="0 0 24 24"><rect x="3" y="4" width="5" height="16" rx="2.5"/><rect x="9.5" y="4" width="5" height="11" rx="2.5"/><rect x="16" y="4" width="5" height="7" rx="2.5"/></symbol>
+  <symbol id="i-bell" viewBox="0 0 24 24"><path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15z"/><path d="M10 21h4"/></symbol>
+  <symbol id="i-ball" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M5.6 5.6c3.2 3.2 3.2 9.6 0 12.8M18.4 5.6c-3.2 3.2-3.2 9.6 0 12.8"/></symbol>
+  <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="11" rx="4"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></symbol>
+  <symbol id="i-home" viewBox="0 0 24 24"><path d="M4 11l8-7 8 7v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
+  <symbol id="i-mail" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="4"/><path d="M4 7l8 6 8-6"/></symbol>
+  <symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></symbol>
+  <symbol id="i-cart" viewBox="0 0 24 24"><circle cx="8" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/><path d="M2.5 3h2.5l2.4 11.2a2 2 0 0 0 2 1.6h8.7a2 2 0 0 0 1.9-1.5L21.5 7H6.1"/></symbol>
+  <symbol id="i-car" viewBox="0 0 24 24"><path d="M5 17H3.5v-4.5l2.2-5.2A2 2 0 0 1 7.5 6h9a2 2 0 0 1 1.8 1.3l2.2 5.2V17H19M9 17h6"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/><path d="M4 12h16"/></symbol>
+  <symbol id="i-plane" viewBox="0 0 24 24"><path d="M17.8 19.2L16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/></symbol>
+  <symbol id="i-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></symbol>
+  <symbol id="i-server" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="7" rx="3"/><rect x="4" y="13" width="16" height="7" rx="3"/><path d="M8 7.5h.01M8 16.5h.01"/></symbol>
+  <symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z"/></symbol>
+</svg>
+
+<!-- Fond à 13 bandes diagonales. Les bandes
+     glissent très lentement ; prefers-reduced-motion les arrête. Caché aux lecteurs d'écran. -->
+<svg class="stripes" aria-hidden="true" focusable="false" viewBox="0 0 1600 1200" preserveAspectRatio="xMidYMid slice">
+  <g transform="rotate(-35 800 600)">
+    <rect x="-200" y="-330" width="1000" height="80" rx="40" style="fill: var(--stripe-1)"/>
+    <rect x="-200" y="-140" width="700" height="120" rx="60" style="fill: var(--stripe-2)"/>
+    <rect x="600" y="-140" width="1100" height="120" rx="60" style="fill: var(--stripe-hl)"/>
+    <rect x="-200" y="96" width="1100" height="96" rx="48" style="fill: var(--stripe-1)"/>
+    <rect x="1000" y="96" width="800" height="96" rx="48" style="fill: var(--stripe-2)"/>
+    <rect x="-200" y="306" width="900" height="130" rx="65" style="fill: var(--stripe-2)"/>
+    <rect x="800" y="306" width="700" height="130" rx="65" style="fill: var(--stripe-tint)"/>
+    <rect x="0" y="470" width="1300" height="56" rx="28" style="fill: var(--stripe-3)"/>
+    <rect x="-200" y="776" width="1000" height="120" rx="60" style="fill: var(--stripe-1)"/>
+    <rect x="900" y="776" width="900" height="120" rx="60" style="fill: var(--stripe-2)"/>
+    <rect x="200" y="1018" width="1200" height="96" rx="48" style="fill: var(--stripe-2)"/>
+    <rect x="400" y="1226" width="1000" height="130" rx="65" style="fill: var(--stripe-1)"/>
+    <rect x="-200" y="1390" width="1100" height="56" rx="28" style="fill: var(--stripe-3)"/>
+  </g>
+</svg>
+
+<a class="skip-link" href="#contenu">Aller au contenu</a>
+
+<!-- ============================== EN-TÊTE ============================== -->
+<header class="site-header">
+  <div class="header-inner">
+    <a class="brand" href="#haut" aria-label="Paladon, retour en haut de la page">
+      <svg class="logo" width="38" height="38" viewBox="0 0 36 36" aria-hidden="true" focusable="false">
+        <rect class="logo-tile" width="36" height="36" rx="12"/>
+        <rect class="logo-ink" x="9" y="8" width="6" height="20" rx="3"/>
+        <circle class="logo-ring" cx="20.5" cy="15" r="5.5"/>
+      </svg>
+      <span class="wordmark">Paladon</span>
+    </a>
+
+    <nav class="site-nav" aria-label="Sections de la page">
+      <ul>
+        <li><a href="#fonctionnalites">Fonctionnalités</a></li>
+        <li><a href="#apercu">Aperçu</a></li>
+        <li><a href="#sources">Sources</a></li>
+        <li><a href="#confidentialite">Confidentialité</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+
+    <a class="lang-switch" href="en/index.html" hreflang="en" lang="en" data-lang-switch="en" aria-label="English version of this site">
+      <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-globe"/></svg>
+      <span>EN</span>
+    </a>
+
+    <button class="theme-toggle" type="button" aria-label="Passer au thème clair">
+      <svg class="icon icon-to-light" aria-hidden="true" focusable="false"><use href="#i-sun"/></svg>
+      <svg class="icon icon-to-dark" aria-hidden="true" focusable="false"><use href="#i-moon"/></svg>
+      <span class="theme-toggle-text" aria-hidden="true">Clair</span>
+    </button>
+  </div>
+</header>
+
+<main id="contenu">
+
+  <!-- ============================== ACCROCHE ============================== -->
+  <section class="hero" id="haut" aria-labelledby="hero-title">
+    <div class="container hero-text reveal">
+      <p class="eyebrow"><span class="chip">Auto-hébergé</span><span class="chip">IA locale</span><span class="chip">Vos données chez vous</span></p>
+      <h1 id="hero-title">Le copilote du quotidien<br class="br-wide"> qui reste chez vous.</h1>
+      <p class="lead">Finances, placements, actualités, tâches et alertes&nbsp;: Paladon réunit l'essentiel de votre quotidien dans une seule application. Installé sur votre propre machine et épaulé par une IA locale, il garde vos données là où elles doivent être&nbsp;: chez vous.</p>
+      <div class="actions">
+        <a class="btn btn-primary" href="#fonctionnalites">Découvrir Paladon</a>
+        <a class="btn btn-secondary" href="#contact">Ça m'intéresse</a>
+      </div>
+    </div>
+
+    <!-- Démonstration interactive : les rubriques du menu affichent un exemple d'écran (données fictives) -->
+    <figure class="container hero-preview reveal">
+      <figcaption class="visually-hidden">Démonstration interactive de Paladon, avec des données fictives. Choisissez une rubrique pour afficher l'écran correspondant.</figcaption>
+      <div class="window">
+        <div class="window-bar" aria-hidden="true">
+          <span class="traffic traffic-close"></span><span class="traffic traffic-minimize"></span><span class="traffic traffic-zoom"></span>
+          <p class="window-title">paladon · <span data-window-title>Accueil</span></p>
+        </div>
+        <div class="window-body">
+          <div class="mock-sidebar">
+            <div class="mock-brand" aria-hidden="true">
+              <svg class="logo" width="28" height="28" viewBox="0 0 36 36" focusable="false"><rect class="logo-tile" width="36" height="36" rx="12"/><rect class="logo-ink" x="9" y="8" width="6" height="20" rx="3"/><circle class="logo-ring" cx="20.5" cy="15" r="5.5"/></svg>
+              <span>Paladon</span>
+            </div>
+            <div class="mock-nav" role="tablist" aria-label="Rubriques de la démonstration" data-tabs data-window-tabs>
+              <button type="button" role="tab" id="demo-tab-home" aria-controls="demo-home" aria-selected="true">Accueil</button>
+              <button type="button" role="tab" id="demo-tab-wealth" aria-controls="demo-wealth" aria-selected="false" tabindex="-1">Patrimoine</button>
+              <button type="button" role="tab" id="demo-tab-goals" aria-controls="demo-goals" aria-selected="false" tabindex="-1">Objectifs</button>
+              <button type="button" role="tab" id="demo-tab-analyses" aria-controls="demo-analyses" aria-selected="false" tabindex="-1">Analyses</button>
+              <button type="button" role="tab" id="demo-tab-markets" aria-controls="demo-markets" aria-selected="false" tabindex="-1">Marchés</button>
+              <button type="button" role="tab" id="demo-tab-betting" aria-controls="demo-betting" aria-selected="false" tabindex="-1">Paris</button>
+              <button type="button" role="tab" id="demo-tab-news" aria-controls="demo-news" aria-selected="false" tabindex="-1">Actualités</button>
+              <button type="button" role="tab" id="demo-tab-tasks" aria-controls="demo-tasks" aria-selected="false" tabindex="-1">Tâches</button>
+            </div>
+          </div>
+
+          <div class="mock-main">
+            <!-- Accueil -->
+            <div class="mock-panel" role="tabpanel" id="demo-home" aria-labelledby="demo-tab-home" tabindex="0">
+              <p class="mock-hello">Bonjour</p>
+              <p class="mock-sub">Vos widgets, disposés comme vous le souhaitez.</p>
+              <div class="widgets">
+                <div class="widget widget-wide">
+                  <p class="w-label">Patrimoine</p>
+                  <p class="w-value" data-count="48312" data-decimals="0" data-suffix=" €">48&#8239;312&nbsp;€</p>
+                  <p class="w-note"><span class="up">+1,8&nbsp;%</span> ce mois-ci</p>
+                  <svg class="spark" viewBox="0 0 600 120" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+                    <path class="draw" pathLength="1" d="M0 100 L54.5 92 L109.1 86 L163.6 90 L218.2 76 L272.7 68 L327.3 62 L381.8 66 L436.4 52 L490.9 41 L545.5 33 L600 20"/>
+                  </svg>
+                </div>
+                <div class="widget">
+                  <p class="w-label">Prélèvements à venir</p>
+                  <ul class="w-list">
+                    <li><span>Loyer</span><span class="num">650,00&nbsp;€</span></li>
+                    <li><span>Électricité</span><span class="num">64,90&nbsp;€</span></li>
+                    <li><span>Forfait mobile</span><span class="num">9,99&nbsp;€</span></li>
+                  </ul>
+                </div>
+                <div class="widget">
+                  <p class="w-label">Météo · Votre ville</p>
+                  <p class="w-value" data-count="14" data-decimals="0" data-suffix=" °C">14&nbsp;°C</p>
+                  <p class="w-note">Nuageux · demain 16&nbsp;°C</p>
+                </div>
+                <div class="widget">
+                  <p class="w-label">Classement des IA</p>
+                  <div class="mini-bars">
+                    <div><span>Modèle A</span><span class="track"><span class="fill" style="--w: 100%"></span></span></div>
+                    <div><span>Modèle B</span><span class="track"><span class="fill" style="--w: 86%"></span></span></div>
+                    <div><span>Modèle C</span><span class="track"><span class="fill" style="--w: 74%"></span></span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Patrimoine -->
+            <div class="mock-panel" role="tabpanel" id="demo-wealth" aria-labelledby="demo-tab-wealth" tabindex="0" hidden>
+              <p class="mock-hello">Patrimoine</p>
+              <p class="mock-sub">Tout ce que vous possédez, au même endroit.</p>
+              <div class="widgets widgets-2">
+                <div class="widget">
+                  <p class="w-label">Patrimoine total</p>
+                  <p class="w-value" data-count="48312.40" data-decimals="2" data-suffix=" €">48&#8239;312,40&nbsp;€</p>
+                  <p class="w-note"><span class="up">+7&#8239;104,00&nbsp;€</span> sur un an</p>
+                  <svg class="spark spark-tall" viewBox="0 0 600 160" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+                    <path class="draw" pathLength="1" d="M0 140 L54.5 128 L109.1 120 L163.6 125 L218.2 105 L272.7 94 L327.3 84 L381.8 91 L436.4 70 L490.9 55 L545.5 44 L600 24"/>
+                  </svg>
+                </div>
+                <div class="widget">
+                  <p class="w-label">Répartition</p>
+                  <div class="cat-bars cat-bars-tight">
+                    <div class="cat"><div class="cat-row"><span>Comptes courants</span><span class="num">4&#8239;210,00&nbsp;€</span></div><span class="track"><span class="fill" style="--w: 22%"></span></span></div>
+                    <div class="cat"><div class="cat-row"><span>Livrets</span><span class="num">12&#8239;600,00&nbsp;€</span></div><span class="track"><span class="fill" style="--w: 67%"></span></span></div>
+                    <div class="cat"><div class="cat-row"><span>PEA</span><span class="num">18&#8239;902,40&nbsp;€</span></div><span class="track"><span class="fill" style="--w: 100%"></span></span></div>
+                    <div class="cat"><div class="cat-row"><span>Assurance-vie</span><span class="num">12&#8239;600,00&nbsp;€</span></div><span class="track"><span class="fill" style="--w: 67%"></span></span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Objectifs -->
+            <div class="mock-panel" role="tabpanel" id="demo-goals" aria-labelledby="demo-tab-goals" tabindex="0" hidden>
+              <p class="mock-hello">Objectifs</p>
+              <p class="mock-sub">Vos projets d'épargne et leur avancement.</p>
+              <div class="goal-list">
+                <div class="widget goal">
+                  <div class="cat-row"><span class="goal-name">Apport immobilier</span><span class="goal-pct num">62&nbsp;%</span></div>
+                  <span class="track"><span class="fill" style="--w: 62%"></span></span>
+                  <p class="w-note"><span class="num">12&#8239;400,00&nbsp;€</span> sur <span class="num">20&#8239;000,00&nbsp;€</span> · échéance décembre 2027 · Livret, PEA</p>
+                </div>
+                <div class="widget goal">
+                  <div class="cat-row"><span class="goal-name">Voyage</span><span class="goal-pct num">75&nbsp;%</span></div>
+                  <span class="track"><span class="fill" style="--w: 75%"></span></span>
+                  <p class="w-note"><span class="num">2&#8239;250,00&nbsp;€</span> sur <span class="num">3&#8239;000,00&nbsp;€</span> · échéance juillet 2026 · Livret</p>
+                </div>
+                <div class="widget goal">
+                  <div class="cat-row"><span class="goal-name">Épargne de précaution</span><span class="goal-pct num up">Atteint</span></div>
+                  <span class="track"><span class="fill" style="--w: 100%"></span></span>
+                  <p class="w-note"><span class="num">6&#8239;000,00&nbsp;€</span> sur <span class="num">6&#8239;000,00&nbsp;€</span> · sans échéance · Livret</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Analyses -->
+            <div class="mock-panel" role="tabpanel" id="demo-analyses" aria-labelledby="demo-tab-analyses" tabindex="0" hidden>
+              <p class="mock-hello">Analyses</p>
+              <p class="mock-sub">Vos dépenses et le flux de votre argent.</p>
+              <div class="widgets widgets-2">
+                <div class="widget">
+                  <p class="w-label">Dépenses par mois</p>
+                  <div class="col-chart">
+                    <div class="col"><span class="col-value num">1&#8239;820&nbsp;€</span><span class="col-bar" style="--h: 93%"></span><span class="col-label">Juin</span></div>
+                    <div class="col"><span class="col-value num">1&#8239;640&nbsp;€</span><span class="col-bar" style="--h: 84%"></span><span class="col-label">Juil.</span></div>
+                    <div class="col"><span class="col-value num">1&#8239;950&nbsp;€</span><span class="col-bar" style="--h: 100%"></span><span class="col-label">Août</span></div>
+                    <div class="col"><span class="col-value num">1&#8239;710&nbsp;€</span><span class="col-bar" style="--h: 88%"></span><span class="col-label">Sept.</span></div>
+                    <div class="col"><span class="col-value num">1&#8239;590&nbsp;€</span><span class="col-bar" style="--h: 82%"></span><span class="col-label">Oct.</span></div>
+                    <div class="col"><span class="col-value num">1&#8239;730&nbsp;€</span><span class="col-bar" style="--h: 89%"></span><span class="col-label">Nov.</span></div>
+                  </div>
+                </div>
+                <div class="widget">
+                  <p class="w-label">Novembre</p>
+                  <div class="kpis kpis-tight">
+                    <div><p class="w-note">Revenus</p><p class="kpi-value kpi-xs">2&#8239;450&nbsp;€</p></div>
+                    <div><p class="w-note">Taux d'épargne</p><p class="kpi-value kpi-xs kpi-highlight">29&nbsp;%</p></div>
+                  </div>
+                  <div class="divider divider-tight"></div>
+                  <p class="w-note">Abonnements repérés</p>
+                  <p class="kpi-value kpi-xs">86,40&nbsp;€ <span class="w-note">par mois</span></p>
+                  <p class="w-note danger-text">4 opérations à classer</p>
+                  <p class="insight-line">Restaurants&nbsp;: +68&nbsp;€ par rapport à votre moyenne</p>
+                </div>
+                <div class="widget widget-wide">
+                  <p class="w-label">Flux du mois&nbsp;: d'où vient l'argent, où il va</p>
+                  <div class="sankey-wrap">
+<svg class="sankey" viewBox="0 0 640 274" role="img" aria-labelledby="sankey-title"><title id="sankey-title">Flux du mois (fictif) : 2 450 € de revenus, dont 720 € d'épargne, 650 € de logement, 412 € de courses, 242 € d'autres dépenses, 186 € de transports, 142 € non classés et 98 € de loisirs.</title>
+<rect class="node flow-income" x="118" y="27.0" width="12" height="220.0" rx="4"/>
+<text class="lbl" x="108" y="133.0" text-anchor="end">Revenus</text><text class="val" x="108" y="151.0" text-anchor="end">2 450 €</text>
+<path class="band flow-savings" d="M130 27.0 C285.0 27.0 285.0 6.0 440 6.0 L440 70.7 C285.0 70.7 285.0 91.7 130 91.7 Z"/>
+<path class="band flow-c1" d="M130 91.7 C285.0 91.7 285.0 77.7 440 77.7 L440 136.0 C285.0 136.0 285.0 150.0 130 150.0 Z"/>
+<path class="band flow-c2" d="M130 150.0 C285.0 150.0 285.0 143.0 440 143.0 L440 180.0 C285.0 180.0 285.0 187.0 130 187.0 Z"/>
+<path class="band flow-other" d="M130 187.0 C285.0 187.0 285.0 187.0 440 187.0 L440 208.7 C285.0 208.7 285.0 208.7 130 208.7 Z"/>
+<path class="band flow-c3" d="M130 208.7 C285.0 208.7 285.0 215.7 440 215.7 L440 232.4 C285.0 232.4 285.0 225.4 130 225.4 Z"/>
+<path class="band flow-none" d="M130 225.4 C285.0 225.4 285.0 239.4 440 239.4 L440 252.2 C285.0 252.2 285.0 238.2 130 238.2 Z"/>
+<path class="band flow-c4" d="M130 238.2 C285.0 238.2 285.0 259.2 440 259.2 L440 268.0 C285.0 268.0 285.0 247.0 130 247.0 Z"/>
+<rect class="node flow-savings" x="440" y="6.0" width="12" height="64.7" rx="3"/>
+<text class="lbl" x="462" y="42.8">Épargne <tspan class="val">720 €</tspan></text>
+<rect class="node flow-c1" x="440" y="77.7" width="12" height="58.4" rx="3"/>
+<text class="lbl" x="462" y="111.3">Logement <tspan class="val">650 €</tspan></text>
+<rect class="node flow-c2" x="440" y="143.0" width="12" height="37.0" rx="3"/>
+<text class="lbl" x="462" y="166.0">Courses <tspan class="val">412 €</tspan></text>
+<rect class="node flow-other" x="440" y="187.0" width="12" height="21.7" rx="3"/>
+<text class="lbl" x="462" y="202.4">Autres <tspan class="val">242 €</tspan></text>
+<rect class="node flow-c3" x="440" y="215.7" width="12" height="16.7" rx="3"/>
+<text class="lbl" x="462" y="228.6">Transports <tspan class="val">186 €</tspan></text>
+<rect class="node flow-none" x="440" y="239.4" width="12" height="12.8" rx="3"/>
+<text class="lbl" x="462" y="250.3">Non classée <tspan class="val">142 €</tspan></text>
+<rect class="node flow-c4" x="440" y="259.2" width="12" height="8.8" rx="3"/>
+<text class="lbl" x="462" y="268.1">Loisirs <tspan class="val">98 €</tspan></text>
+</svg>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Marchés -->
+            <div class="mock-panel" role="tabpanel" id="demo-markets" aria-labelledby="demo-tab-markets" tabindex="0" hidden>
+              <p class="mock-hello">Marchés</p>
+              <p class="mock-sub">Graphiques, indicateurs et portefeuille fictif.</p>
+              <div class="widgets">
+                <div class="widget widget-wide">
+                  <div class="mock-head">
+                    <div>
+                      <p class="w-label">ETF Monde (exemple)</p>
+                      <p class="w-value" data-count="117.58" data-decimals="2" data-suffix=" €">117,58&nbsp;€</p>
+                      <p class="w-note"><span class="up">+17,6&nbsp;%</span> sur 6 mois</p>
+                    </div>
+                    <div class="chip-group"><span class="chip chip-sm chip-on">Bougies</span><span class="chip chip-sm">Moyenne 5</span><span class="chip chip-sm">RSI</span><span class="chip chip-sm">MACD</span></div>
+                  </div>
+                  <svg class="candles" viewBox="0 0 560 180" aria-hidden="true" focusable="false">
+                    <g class="up"><line x1="11.7" y1="159.4" x2="11.7" y2="164.6"/><rect x="5.7" y="162.8" width="12" height="1.5" rx="1"/></g>
+                    <g class="down"><line x1="35" y1="156.7" x2="35" y2="164.6"/><rect x="29" y="162.8" width="12" height="1.5" rx="1"/></g>
+                    <g class="up"><line x1="58.3" y1="142.2" x2="58.3" y2="170"/><rect x="52.3" y="145" width="12" height="18.2" rx="3"/></g>
+                    <g class="up"><line x1="81.7" y1="135.5" x2="81.7" y2="146.2"/><rect x="75.7" y="138.1" width="12" height="6.9" rx="3"/></g>
+                    <g class="down"><line x1="105" y1="132.5" x2="105" y2="159.5"/><rect x="99" y="138.1" width="12" height="18.1" rx="3"/></g>
+                    <g class="up"><line x1="128.3" y1="134.9" x2="128.3" y2="167.6"/><rect x="122.3" y="146" width="12" height="10.2" rx="3"/></g>
+                    <g class="down"><line x1="151.7" y1="142.9" x2="151.7" y2="155.9"/><rect x="145.7" y="146" width="12" height="7.9" rx="3"/></g>
+                    <g class="up"><line x1="175" y1="147.4" x2="175" y2="158.1"/><rect x="169" y="150.9" width="12" height="3" rx="1.5"/></g>
+                    <g class="up"><line x1="198.3" y1="140.6" x2="198.3" y2="155.2"/><rect x="192.3" y="143.1" width="12" height="7.8" rx="3"/></g>
+                    <g class="up"><line x1="221.7" y1="113.4" x2="221.7" y2="151"/><rect x="215.7" y="117" width="12" height="26.1" rx="3"/></g>
+                    <g class="down"><line x1="245" y1="112.2" x2="245" y2="123.7"/><rect x="239" y="117" width="12" height="4.4" rx="2"/></g>
+                    <g class="up"><line x1="268.3" y1="115" x2="268.3" y2="123.1"/><rect x="262.3" y="119.1" width="12" height="2.3" rx="1"/></g>
+                    <g class="down"><line x1="291.7" y1="112.9" x2="291.7" y2="124.7"/><rect x="285.7" y="119.1" width="12" height="2.2" rx="1"/></g>
+                    <g class="up"><line x1="315" y1="96.4" x2="315" y2="122.9"/><rect x="309" y="101.7" width="12" height="19.6" rx="3"/></g>
+                    <g class="up"><line x1="338.3" y1="82.7" x2="338.3" y2="102"/><rect x="332.3" y="92.4" width="12" height="9.3" rx="3"/></g>
+                    <g class="up"><line x1="361.7" y1="58.5" x2="361.7" y2="94.5"/><rect x="355.7" y="71.6" width="12" height="20.8" rx="3"/></g>
+                    <g class="up"><line x1="385" y1="64" x2="385" y2="74.9"/><rect x="379" y="69.4" width="12" height="2.2" rx="1"/></g>
+                    <g class="up"><line x1="408.3" y1="56.9" x2="408.3" y2="74.8"/><rect x="402.3" y="66.5" width="12" height="2.9" rx="1"/></g>
+                    <g class="up"><line x1="431.7" y1="47.9" x2="431.7" y2="75.9"/><rect x="425.7" y="54.1" width="12" height="12.4" rx="3"/></g>
+                    <g class="up"><line x1="455" y1="44.9" x2="455" y2="62.6"/><rect x="449" y="45.6" width="12" height="8.5" rx="3"/></g>
+                    <g class="up"><line x1="478.3" y1="29.9" x2="478.3" y2="48.6"/><rect x="472.3" y="33.9" width="12" height="11.7" rx="3"/></g>
+                    <g class="down"><line x1="501.7" y1="27.6" x2="501.7" y2="50.3"/><rect x="495.7" y="33.9" width="12" height="12.9" rx="3"/></g>
+                    <g class="up"><line x1="525" y1="13" x2="525" y2="56.3"/><rect x="519" y="26.2" width="12" height="20.6" rx="3"/></g>
+                    <g class="up"><line x1="548.3" y1="10" x2="548.3" y2="30"/><rect x="542.3" y="19.4" width="12" height="6.8" rx="3"/></g>
+                    <path class="sma draw" pathLength="1" d="M105 153 L128.3 149.7 L151.7 147.8 L175 149 L198.3 150 L221.7 142.2 L245 137.3 L268.3 130.3 L291.7 124.4 L315 116.1 L338.3 111.2 L361.7 101.2 L385 91.3 L408.3 80.3 L431.7 70.8 L455 61.4 L478.3 53.9 L501.7 49.4 L525 41.3 L548.3 34.4"/>
+                  </svg>
+                </div>
+                <div class="widget widget-wide widget-row">
+                  <div><p class="w-label">Portefeuille fictif de l'IA</p><p class="kpi-value kpi-xs">10&#8239;412,30&nbsp;€ <span class="up">+4,1&nbsp;%</span></p></div>
+                  <div><p class="w-label">Repère CAC&nbsp;40</p><p class="kpi-value kpi-xs">+2,7&nbsp;%</p></div>
+                  <div><p class="w-label">Dernier ordre</p><p class="w-row-text">Achat de 3 parts, frais 0,5&nbsp;%</p></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Paris -->
+            <div class="mock-panel" role="tabpanel" id="demo-betting" aria-labelledby="demo-tab-betting" tabindex="0" hidden>
+              <p class="mock-hello">Paris fictifs<span class="asterisk" aria-hidden="true">*</span></p>
+              <p class="mock-sub">Un modèle statistique face aux bookmakers, sans argent réel.</p>
+              <div class="widgets">
+                <div class="widget widget-wide widget-row">
+                  <div><p class="w-label">Cagnotte fictive</p><p class="w-value" data-count="1038.20" data-decimals="2" data-suffix=" €">1&#8239;038,20&nbsp;€</p></div>
+                  <div><p class="w-label">Depuis le début</p><p class="kpi-value kpi-xs up">+3,8&nbsp;%</p></div>
+                  <div><p class="w-label">Paris en cours</p><p class="kpi-value kpi-xs">2</p></div>
+                </div>
+                <div class="widget widget-wide">
+                  <p class="w-label">Matchs à venir</p>
+                  <table class="mock-table">
+                    <thead><tr><th scope="col">Match</th><th scope="col">Modèle</th><th scope="col">Bookmaker</th><th scope="col">Décision</th></tr></thead>
+                    <tbody>
+                      <tr><td>Joueur A – Joueur B</td><td class="num">62&nbsp;%</td><td class="num">55&nbsp;%</td><td>20,00&nbsp;€ sur Joueur A</td></tr>
+                      <tr><td>Joueuse C – Joueuse D</td><td class="num">48&nbsp;%</td><td class="num">51&nbsp;%</td><td class="muted-cell">Pas de pari</td></tr>
+                      <tr><td>Joueur E – Joueur F</td><td class="num">71&nbsp;%</td><td class="num">64&nbsp;%</td><td>15,00&nbsp;€ sur Joueur E</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            <!-- Actualités -->
+            <div class="mock-panel" role="tabpanel" id="demo-news" aria-labelledby="demo-tab-news" tabindex="0" hidden>
+              <p class="mock-hello">Actualités</p>
+              <p class="mock-sub">Vos sources, classées par thème.</p>
+              <div class="chip-group"><span class="chip chip-sm chip-on">Tout</span><span class="chip chip-sm">IA</span><span class="chip chip-sm">Tech</span><span class="chip chip-sm">Dev</span><span class="chip chip-sm">Monde</span></div>
+              <ul class="news-list">
+                <li><span class="tag tag-purple">IA</span><span class="news-title">Les assistants de programmation gagnent en autonomie</span><span class="w-note">Source A · il y a 2&nbsp;h</span></li>
+                <li><span class="tag tag-blue">Tech</span><span class="news-title">Un nouveau standard pour recharger tous ses appareils</span><span class="w-note">Source B · il y a 3&nbsp;h</span></li>
+                <li><span class="tag tag-orange">Dev</span><span class="news-title">Cinq pistes pour accélérer ses tests automatiques</span><span class="w-note">Source C · il y a 5&nbsp;h</span></li>
+                <li><span class="tag tag-green">Monde</span><span class="news-title">Sommet international sur le climat&nbsp;: les points clés</span><span class="w-note">Source D · hier</span></li>
+              </ul>
+            </div>
+
+            <!-- Tâches -->
+            <div class="mock-panel" role="tabpanel" id="demo-tasks" aria-labelledby="demo-tab-tasks" tabindex="0" hidden>
+              <p class="mock-hello">Tâches</p>
+              <p class="mock-sub">Vos projets personnels, colonne par colonne.</p>
+              <div class="board">
+                <div class="board-col">
+                  <p class="board-title">À faire <span class="w-note">3</span></p>
+                  <div class="task"><span>Renouveler l'assurance habitation</span><span class="tag tag-blue">Maison</span></div>
+                  <div class="task"><span>Préparer les vacances</span><span class="tag tag-purple">Perso</span></div>
+                  <div class="task"><span>Trier les papiers</span><span class="tag tag-gray">Administratif</span></div>
+                </div>
+                <div class="board-col">
+                  <p class="board-title">En cours <span class="w-note">1</span></p>
+                  <div class="task"><span>Comparer les forfaits mobiles</span><span class="tag tag-green">Budget</span></div>
+                </div>
+                <div class="board-col">
+                  <p class="board-title">Fait <span class="w-note">1</span></p>
+                  <div class="task task-done"><span>Déclarer ses revenus</span><span class="tag tag-orange">Impôts</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bouton rond et panneau du copilote -->
+          <button class="mock-fab" type="button" aria-expanded="false" aria-controls="demo-copilot">
+            <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-chat"/></svg>
+            <span class="visually-hidden">Ouvrir le copilote (démonstration)</span>
+          </button>
+          <div class="mock-copilot" id="demo-copilot" role="dialog" aria-label="Copilote (démonstration)" hidden>
+            <div class="copilot-head">
+              <p class="notif-title">Copilote</p>
+              <button class="icon-btn" type="button" data-copilot-close>
+                <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-close"/></svg>
+                <span class="visually-hidden">Fermer le copilote</span>
+              </button>
+            </div>
+            <div class="chat-body">
+              <p class="bubble bubble-user">Où part mon argent ce mois-ci&nbsp;?</p>
+              <div class="bubble bubble-bot">
+                <p>Vos trois plus grosses dépenses sont le logement (<strong>650&nbsp;€</strong>), les courses (<strong>412&nbsp;€</strong>) et les transports (<strong>186&nbsp;€</strong>). C'est proche de votre moyenne.</p>
+                <p class="bubble-source"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-check"/></svg>Source&nbsp;: dépenses du mois, calculées par le code</p>
+              </div>
+              <span class="fake-input">Posez votre question…</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p class="hint">Cliquez sur les rubriques et sur la bulle pour explorer. Toutes les données sont fictives.<br>* Pour l'instant, les paris fictifs ne portent que sur le tennis.</p>
+    </figure>
+  </section>
+
+  <!-- ============================== FONCTIONNALITÉS (onglets par thème) ============================== -->
+  <section class="section" id="fonctionnalites" aria-labelledby="features-title">
+    <div class="container">
+      <header class="section-head reveal">
+        <p class="kicker">Fonctionnalités</p>
+        <h2 id="features-title">Tout votre quotidien, dans une seule application</h2>
+        <p class="section-lead">Conçu d'abord pour les finances, Paladon couvre aujourd'hui vos placements, votre veille, votre organisation et vos alertes.</p>
+      </header>
+
+      <div class="feature-tabs reveal">
+        <div class="feature-nav" role="tablist" aria-label="Thèmes des fonctionnalités" data-tabs>
+          <button type="button" role="tab" id="ft-tab-accounts" aria-controls="ft-accounts" aria-selected="true">
+            <svg class="feature-icon" aria-hidden="true" focusable="false"><use href="#i-wallet"/></svg>
+            <span><span class="ft-title">Comptes et objectifs</span><span class="ft-sub">Patrimoine, banques et projets d'épargne</span></span>
+          </button>
+          <button type="button" role="tab" id="ft-tab-budget" aria-controls="ft-budget" aria-selected="false" tabindex="-1">
+            <svg class="feature-icon" aria-hidden="true" focusable="false"><use href="#i-bars"/></svg>
+            <span><span class="ft-title">Budget et impôts</span><span class="ft-sub">Analyses, règles sur mesure et fiscalité</span></span>
+          </button>
+          <button type="button" role="tab" id="ft-tab-markets" aria-controls="ft-markets" aria-selected="false" tabindex="-1">
+            <svg class="feature-icon" aria-hidden="true" focusable="false"><use href="#i-chart"/></svg>
+            <span><span class="ft-title">Marchés</span><span class="ft-sub">Bourse, portefeuille et paris fictifs</span></span>
+          </button>
+          <button type="button" role="tab" id="ft-tab-copilot" aria-controls="ft-copilot" aria-selected="false" tabindex="-1">
+            <svg class="feature-icon" aria-hidden="true" focusable="false"><use href="#i-chat"/></svg>
+            <span><span class="ft-title">Copilote et alertes</span><span class="ft-sub">Une IA locale et des alertes utiles</span></span>
+          </button>
+          <button type="button" role="tab" id="ft-tab-daily" aria-controls="ft-daily" aria-selected="false" tabindex="-1">
+            <svg class="feature-icon" aria-hidden="true" focusable="false"><use href="#i-grid"/></svg>
+            <span><span class="ft-title">Quotidien</span><span class="ft-sub">Accueil, actualités et tâches</span></span>
+          </button>
+        </div>
+
+        <div class="card feature-panels">
+          <div class="feature-panel" role="tabpanel" id="ft-accounts" aria-labelledby="ft-tab-accounts" tabindex="0">
+            <div class="feature-item">
+              <h3>Patrimoine et comptes</h3>
+              <p>Comptes courants, livrets, PEA et assurance-vie réunis en un seul endroit. Une photo de votre patrimoine est prise chaque jour, et son évolution se lit par jour, par semaine, par mois ou par année.</p>
+            </div>
+            <div class="feature-item">
+              <h3>Toutes vos banques, sans double comptage</h3>
+              <p>Connectez une ou plusieurs banques en lecture seule (norme européenne DSP2)&nbsp;: vos comptes courants se synchronisent automatiquement. Pour l'instant, les livrets (Livret&nbsp;A, LEP…) se saisissent à la main, et les placements se saisissent ou s'importent&nbsp;; leurs cours, eux, se mettent à jour seuls. Les virements entre vos propres comptes sont repérés automatiquement&nbsp;: ils ne comptent ni comme une dépense, ni comme un second revenu.</p>
+            </div>
+            <div class="feature-item">
+              <h3>Objectifs d'épargne</h3>
+              <p>Fixez un montant à atteindre, une échéance si vous le souhaitez, et les comptes qui y contribuent. Paladon suit l'avancement de chaque objectif, et le copilote peut vous dire où vous en êtes.</p>
+            </div>
+          </div>
+
+          <div class="feature-panel" role="tabpanel" id="ft-budget" aria-labelledby="ft-tab-budget" tabindex="0" hidden>
+            <div class="feature-item">
+              <h3>Budget et analyses</h3>
+              <p>Bilan du mois et taux d'épargne calculés pour vous, abonnements et prélèvements repérés, diagramme de flux pour voir d'un coup d'œil où part l'argent.</p>
+            </div>
+            <div class="feature-item">
+              <h3>Règles et étiquettes sur mesure</h3>
+              <p>Des règles de classement qui combinent libellé, montant et compte, et peuvent ajouter une étiquette. Une opération se répartit sur plusieurs catégories, et les étiquettes (vacances, travaux…) ont leurs propres totaux. Corriger une catégorie propose d'en faire une règle.</p>
+            </div>
+            <div class="feature-item">
+              <h3>Fiscalité</h3>
+              <p>Estimation de l'impôt sur le revenu avec la tranche marginale et le détail du calcul, simulateur PER et comparateur Livret&nbsp;A, PEA, assurance-vie et PER, sources à l'appui.</p>
+            </div>
+          </div>
+
+          <div class="feature-panel" role="tabpanel" id="ft-markets" aria-labelledby="ft-tab-markets" tabindex="0" hidden>
+            <div class="feature-item">
+              <h3>Bourse et graphiques</h3>
+              <p>Cours des actions et ETF mis à jour automatiquement, graphiques en bougies avec moyennes, Bollinger, RSI et MACD, outils de dessin et comparaison de quatre titres.</p>
+            </div>
+            <div class="feature-item">
+              <h3>Portefeuille fictif géré par l'IA</h3>
+              <p>L'IA gère un portefeuille virtuel&nbsp;: elle lit l'actualité, passe des ordres fictifs avec frais et garde-fous, et tient un journal comparé au CAC&nbsp;40. Aucun argent réel.</p>
+            </div>
+            <div class="feature-item">
+              <h3>Paris sportifs fictifs<span class="asterisk" aria-hidden="true">*</span></h3>
+              <p>Un modèle statistique (Elo, forme, cotes) mise 1&#8239;000&nbsp;€ fictifs pour mesurer s'il fait mieux que les bookmakers. Aucun pari réel.</p>
+              <p class="footnote">* Pour l'instant, les paris fictifs ne portent que sur le tennis.</p>
+            </div>
+          </div>
+
+          <div class="feature-panel" role="tabpanel" id="ft-copilot" aria-labelledby="ft-tab-copilot" tabindex="0" hidden>
+            <div class="feature-item">
+              <h3>Copilote IA local</h3>
+              <p>Posez vos questions en français. Le copilote interroge des fonctions testées, explique leurs résultats et affiche ses sources. Il fonctionne entièrement sur votre machine.</p>
+            </div>
+            <div class="feature-item">
+              <h3>Bilan et alertes proactives</h3>
+              <p>Après chaque import et sur l'accueil, Paladon signale ce qui mérite votre attention&nbsp;: une catégorie qui s'envole par rapport à votre moyenne, de l'argent qui dort sur le compte courant, un nouvel abonnement, des opérations à classer. Ces alertes sont calculées par le code, pas par l'IA.</p>
+            </div>
+            <div class="feature-item">
+              <h3>Briefing du matin</h3>
+              <p>À l'heure de votre choix&nbsp;: la météo, votre agenda, les prélèvements du jour, les paris en cours et le portefeuille de la veille, réunis en une seule notification.</p>
+            </div>
+            <div class="feature-item">
+              <h3>Notifications</h3>
+              <p>En Web Push sur votre téléphone ou votre navigateur, et dans vos salons Discord&nbsp;: baisse d'un placement, alerte de cours, banque à reconnecter… Pour chacune, vous choisissez la destination et le niveau de détail, avec ou sans montants.</p>
+            </div>
+          </div>
+
+          <div class="feature-panel" role="tabpanel" id="ft-daily" aria-labelledby="ft-tab-daily" tabindex="0" hidden>
+            <div class="feature-item">
+              <h3>Accueil à widgets</h3>
+              <p>Composez votre page d'accueil&nbsp;: patrimoine, dernières opérations, prélèvements, météo, agenda, bourse, paris, actualités… Chaque widget se déplace et se redimensionne.</p>
+            </div>
+            <div class="feature-item">
+              <h3>Actualités et classement des IA <span class="chip chip-progress">En cours</span></h3>
+              <p>Vos flux classés en IA, Tech, Dev et Monde, une carte du monde des sujets et le classement Arena des modèles d'IA. Les filtres par source et par mots-clés sont en cours de finition.</p>
+            </div>
+            <div class="feature-item">
+              <h3>Tâches <span class="chip chip-progress">En cours</span></h3>
+              <p>Des tableaux pour vos projets personnels&nbsp;: colonnes, cartes et étiquettes de couleur. La page est en cours de finition.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================== APERÇU ============================== -->
+  <section class="section" id="apercu" aria-labelledby="preview-title">
+    <div class="container">
+      <header class="section-head reveal">
+        <p class="kicker">Aperçu</p>
+        <h2 id="preview-title">Pensé pour être lu d'un coup d'œil</h2>
+        <p class="section-lead">Des écrans recréés pour ce site, avec des chiffres fictifs.</p>
+      </header>
+
+      <!-- 1. Patrimoine -->
+      <div class="showcase reveal">
+        <div class="showcase-text">
+          <h3>Votre patrimoine, en un regard</h3>
+          <p>Comptes, livrets, PEA, assurance-vie, même répartis entre plusieurs banques&nbsp;: tout est additionné pour vous, et son évolution se lit par jour, par semaine, par mois ou par année.</p>
+          <ul class="ticks">
+            <li><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-check"/></svg>Comptes courants synchronisés, même dans plusieurs banques</li>
+            <li><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-check"/></svg>Livrets saisis à la main, cours des placements mis à jour seuls</li>
+            <li><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-check"/></svg>Une photo du patrimoine chaque jour</li>
+          </ul>
+        </div>
+        <figure class="card mock-card">
+          <figcaption class="visually-hidden">Exemple fictif : patrimoine de 48 312,40 €, en hausse sur douze mois.</figcaption>
+          <div aria-hidden="true">
+            <div class="mock-head">
+              <div>
+                <p class="w-label">Patrimoine total</p>
+                <p class="kpi-value" data-count="48312.40" data-decimals="2" data-suffix=" €">48&#8239;312,40&nbsp;€</p>
+                <p class="w-note"><span class="up">+7&#8239;104,00&nbsp;€</span> sur un an</p>
+              </div>
+              <div class="segmented"><span>Jour</span><span>Semaine</span><span>Mois</span><span class="is-active">Année</span></div>
+            </div>
+            <svg class="curve" viewBox="0 0 600 200" focusable="false">
+              <line class="grid" x1="0" y1="40" x2="600" y2="40"/>
+              <line class="grid" x1="0" y1="100" x2="600" y2="100"/>
+              <line class="grid" x1="0" y1="160" x2="600" y2="160"/>
+              <path class="draw" pathLength="1" d="M4 167.3 L54.5 154.1 L109.1 144.7 L163.6 150.3 L218.2 127.7 L272.7 114.4 L327.3 103.1 L381.8 110.7 L436.4 86.1 L490.9 69.1 L545.5 55.9 L596 33.2"/>
+              <circle class="dot" cx="596" cy="33.2" r="5"/>
+            </svg>
+            <div class="axis"><span>Déc.</span><span>Mars</span><span>Juin</span><span>Sept.</span><span>Nov.</span></div>
+          </div>
+        </figure>
+      </div>
+
+      <!-- 2. Objectifs -->
+      <div class="showcase showcase-reverse reveal">
+        <div class="showcase-text">
+          <h3>Des objectifs, et leur progression</h3>
+          <p>Un apport immobilier, un voyage, une épargne de précaution&nbsp;: fixez le montant, l'échéance et les comptes concernés. Paladon suit l'avancement à mesure que vos comptes évoluent.</p>
+          <ul class="ticks">
+            <li><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-check"/></svg>Avancement calculé à partir de vos comptes</li>
+            <li><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-check"/></svg>Le copilote vous dit où vous en êtes</li>
+          </ul>
+        </div>
+        <figure class="card mock-card">
+          <figcaption class="visually-hidden">Exemple fictif de trois objectifs d'épargne : apport immobilier à 62 %, voyage à 75 %, épargne de précaution atteinte.</figcaption>
+          <div class="goal-list" aria-hidden="true">
+            <div class="goal goal-flat">
+              <div class="cat-row"><span class="goal-name">Apport immobilier</span><span class="goal-pct num">62&nbsp;%</span></div>
+              <span class="track"><span class="fill" style="--w: 62%"></span></span>
+              <p class="w-note"><span class="num">12&#8239;400&nbsp;€</span> sur <span class="num">20&#8239;000&nbsp;€</span> · décembre 2027</p>
+            </div>
+            <div class="goal goal-flat">
+              <div class="cat-row"><span class="goal-name">Voyage</span><span class="goal-pct num">75&nbsp;%</span></div>
+              <span class="track"><span class="fill" style="--w: 75%"></span></span>
+              <p class="w-note"><span class="num">2&#8239;250&nbsp;€</span> sur <span class="num">3&#8239;000&nbsp;€</span> · juillet 2026</p>
+            </div>
+            <div class="goal goal-flat">
+              <div class="cat-row"><span class="goal-name">Épargne de précaution</span><span class="goal-pct num up">Atteint</span></div>
+              <span class="track"><span class="fill" style="--w: 100%"></span></span>
+              <p class="w-note"><span class="num">6&#8239;000&nbsp;€</span> sur <span class="num">6&#8239;000&nbsp;€</span> · sans échéance</p>
+            </div>
+          </div>
+        </figure>
+      </div>
+
+      <!-- 3. Budget -->
+      <div class="showcase reveal">
+        <div class="showcase-text">
+          <h3>Savoir où part votre argent</h3>
+          <p>Chaque mois, Paladon calcule vos revenus, vos dépenses et votre taux d'épargne, et classe vos opérations avec des règles à votre mesure. Ce qui sort de l'ordinaire est signalé.</p>
+          <ul class="ticks">
+            <li><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-check"/></svg>Règles combinant libellé, montant et compte</li>
+            <li><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-check"/></svg>Une opération répartie sur plusieurs catégories</li>
+            <li><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-check"/></svg>Des étiquettes en plus des catégories, avec leurs totaux</li>
+          </ul>
+        </div>
+        <figure class="card mock-card">
+          <figcaption class="visually-hidden">Exemple fictif de bilan mensuel : revenus 2 450 €, dépenses 1 730 €, taux d'épargne 29 %, et cinq catégories de dépenses.</figcaption>
+          <div aria-hidden="true">
+            <div class="kpis">
+              <div><p class="w-label">Revenus</p><p class="kpi-value kpi-sm" data-count="2450" data-decimals="0" data-suffix=" €">2&#8239;450&nbsp;€</p></div>
+              <div><p class="w-label">Dépenses</p><p class="kpi-value kpi-sm" data-count="1730" data-decimals="0" data-suffix=" €">1&#8239;730&nbsp;€</p></div>
+              <div><p class="w-label">Taux d'épargne</p><p class="kpi-value kpi-sm kpi-highlight" data-count="29" data-decimals="0" data-suffix=" %">29&nbsp;%</p></div>
+            </div>
+            <div class="divider"></div>
+            <div class="cat-bars">
+              <div class="cat cat-rich">
+                <div class="cat-row"><span class="cat-name"><span class="cat-icon cat-housing"><svg class="icon" focusable="false"><use href="#i-home"/></svg></span>Logement</span><span class="cat-amount"><span class="num">650&nbsp;€</span><span class="cat-pct num">37,6&nbsp;%</span></span></div>
+                <span class="track"><span class="fill" style="--w: 100%"></span></span>
+              </div>
+              <div class="cat cat-rich">
+                <div class="cat-row"><span class="cat-name"><span class="cat-icon cat-groceries"><svg class="icon" focusable="false"><use href="#i-cart"/></svg></span>Courses</span><span class="cat-amount"><span class="num">412&nbsp;€</span><span class="cat-pct num">23,8&nbsp;%</span></span></div>
+                <span class="track"><span class="fill" style="--w: 63%"></span></span>
+              </div>
+              <div class="cat cat-rich">
+                <div class="cat-row"><span class="cat-name"><span class="cat-icon cat-transport"><svg class="icon" focusable="false"><use href="#i-car"/></svg></span>Transports</span><span class="cat-amount"><span class="num">186&nbsp;€</span><span class="cat-pct num">10,8&nbsp;%</span></span></div>
+                <span class="track"><span class="fill" style="--w: 29%"></span></span>
+              </div>
+              <div class="cat cat-rich is-danger">
+                <div class="cat-row"><span class="cat-name"><span class="pill-danger">Non classée</span><span class="cat-action">Les classer →</span></span><span class="cat-amount"><span class="num">142&nbsp;€</span><span class="cat-pct num">8,2&nbsp;%</span></span></div>
+                <span class="track"><span class="fill" style="--w: 22%"></span></span>
+              </div>
+              <div class="cat cat-rich">
+                <div class="cat-row"><span class="cat-name"><span class="cat-icon cat-leisure"><svg class="icon" focusable="false"><use href="#i-plane"/></svg></span>Loisirs</span><span class="cat-amount"><span class="num">98&nbsp;€</span><span class="cat-pct num">5,7&nbsp;%</span></span></div>
+                <span class="track"><span class="fill" style="--w: 15%"></span></span>
+              </div>
+            </div>
+            <p class="insight-line insight-box">Point d'attention&nbsp;: Loisirs, +62&nbsp;€ par rapport à votre moyenne des 3 derniers mois.</p>
+          </div>
+        </figure>
+      </div>
+
+      <!-- 4. Copilote -->
+      <div class="showcase showcase-reverse reveal">
+        <div class="showcase-text">
+          <h3>Un copilote qui explique, sans inventer</h3>
+          <p>Le copilote ne calcule rien lui-même&nbsp;: il obtient les chiffres auprès de fonctions testées, puis vous les explique simplement, sources à l'appui.</p>
+          <ul class="ticks">
+            <li><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-check"/></svg>Historique des conversations</li>
+            <li><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-check"/></svg>Modèle d'IA local, sur votre machine</li>
+          </ul>
+        </div>
+        <figure class="card mock-card chat">
+          <figcaption class="visually-hidden">Exemple fictif de conversation avec le copilote sur la capacité d'épargne.</figcaption>
+          <div class="chat-body" aria-hidden="true">
+            <p class="bubble bubble-user">Combien puis-je mettre de côté ce mois-ci&nbsp;?</p>
+            <div class="bubble bubble-bot">
+              <p>Sur vos trois derniers mois, il vous reste en moyenne <strong>720&nbsp;€</strong> une fois vos dépenses payées. Mettre <strong>500&nbsp;€</strong> de côté vous laisse une marge confortable.</p>
+              <p class="bubble-source"><svg class="icon" focusable="false"><use href="#i-check"/></svg>Source&nbsp;: capacité d'épargne, calculée par le code</p>
+            </div>
+            <div class="chips-row"><span class="chip">Où part mon argent&nbsp;?</span><span class="chip">Un PER, est-ce intéressant&nbsp;?</span></div>
+            <span class="fake-input">Posez votre question…</span>
+          </div>
+        </figure>
+      </div>
+
+      <!-- 5. Briefing -->
+      <div class="showcase reveal">
+        <div class="showcase-text">
+          <h3>Votre journée en une notification</h3>
+          <p>Le briefing du matin arrive sur votre téléphone ou dans votre salon Discord. Vous choisissez l'heure, et le contenu de chaque alerte.</p>
+          <ul class="ticks">
+            <li><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-check"/></svg>Alertes de cours et de baisse de plus de 3&nbsp;%</li>
+            <li><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-check"/></svg>Rappel quand la banque doit être reconnectée</li>
+          </ul>
+        </div>
+        <figure class="card mock-card notif">
+          <figcaption class="visually-hidden">Exemple fictif de briefing du matin.</figcaption>
+          <div aria-hidden="true">
+            <div class="notif-head">
+              <svg class="logo" width="32" height="32" viewBox="0 0 36 36" focusable="false"><rect class="logo-tile" width="36" height="36" rx="12"/><rect class="logo-ink" x="9" y="8" width="6" height="20" rx="3"/><circle class="logo-ring" cx="20.5" cy="15" r="5.5"/></svg>
+              <div><p class="notif-title">Briefing du matin</p><p class="w-note">Paladon · 7:00</p></div>
+            </div>
+            <ul class="notif-list">
+              <li><span class="w-label">Météo</span><span>14&nbsp;°C, nuageux</span></li>
+              <li><span class="w-label">Agenda</span><span>2 rendez-vous aujourd'hui</span></li>
+              <li><span class="w-label">Prélèvements</span><span>Forfait mobile, 9,99&nbsp;€</span></li>
+              <li><span class="w-label">Paris fictifs</span><span>1 match suivi ce soir</span></li>
+              <li><span class="w-label">Portefeuille fictif</span><span><span class="up">+0,4&nbsp;%</span> hier</span></li>
+            </ul>
+          </div>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================== SOURCES ============================== -->
+  <section class="section" id="sources" aria-labelledby="sources-title">
+    <div class="container">
+      <header class="section-head reveal">
+        <p class="kicker">Sources de données</p>
+        <h2 id="sources-title">D'où viennent les informations</h2>
+        <p class="section-lead">Certaines sources restent sur votre machine. Les autres sont des services externes, interrogés en lecture seule et avec le strict minimum. Celles qui demandent une clé sont facultatives.</p>
+      </header>
+
+      <div class="card sources-local reveal">
+        <div class="sources-head">
+          <svg class="feature-icon" aria-hidden="true" focusable="false"><use href="#i-home"/></svg>
+          <div><h3>Ce qui reste sur votre machine</h3><p class="w-note">Rien n'est envoyé à l'extérieur.</p></div>
+        </div>
+        <ul class="local-list" role="list">
+          <li><strong>Ollama</strong><span>Le modèle d'IA du copilote, exécuté localement</span></li>
+          <li><strong>Imports de fichiers</strong><span>Relevés CSV de votre banque, format reconnu automatiquement</span></li>
+          <li><strong>tennis-data</strong><span>Historique des matchs de tennis, pour régler le modèle de paris fictifs<span class="asterisk" aria-hidden="true">*</span></span></li>
+          <li><strong>Natural Earth</strong><span>Contours des pays de la carte des actualités</span></li>
+        </ul>
+      </div>
+
+      <div class="card sources-ext reveal">
+        <div class="sources-head">
+          <svg class="feature-icon" aria-hidden="true" focusable="false"><use href="#i-globe"/></svg>
+          <div><h3>Services externes, en lecture seule</h3><p class="w-note">Pour chacun&nbsp;: son usage, et ce qui lui est envoyé.</p></div>
+        </div>
+        <table class="sources-table">
+          <caption class="visually-hidden">Services externes utilisés par Paladon, leur usage et les informations qui leur sont envoyées</caption>
+          <thead>
+            <tr><th scope="col">Service</th><th scope="col">Utilisé pour</th><th scope="col">Ce qui est envoyé</th></tr>
+          </thead>
+          <tbody>
+            <tr class="group-row"><th scope="colgroup" colspan="3">Banque</th></tr>
+            <tr><th scope="row">Enable Banking <span class="chip chip-sm">Facultatif</span></th><td>Synchroniser opérations et soldes des comptes courants, dans une ou plusieurs banques (norme DSP2). Les livrets se saisissent à la main.</td><td>Des demandes de lecture, après votre accord auprès de la banque</td></tr>
+          </tbody>
+          <tbody>
+            <tr class="group-row"><th scope="colgroup" colspan="3">Bourse</th></tr>
+            <tr><th scope="row">Yahoo Finance</th><td>Cours des ETF et des titres européens</td><td>Le symbole ou l'ISIN du titre</td></tr>
+            <tr><th scope="row">Twelve Data <span class="chip chip-sm">Facultatif</span></th><td>Cours des actions américaines</td><td>Le symbole du titre</td></tr>
+            <tr><th scope="row">Finnhub <span class="chip chip-sm">Facultatif</span></th><td>Actualités d'un titre suivi</td><td>Le symbole du titre</td></tr>
+          </tbody>
+          <tbody>
+            <tr class="group-row"><th scope="colgroup" colspan="3">Météo et veille</th></tr>
+            <tr><th scope="row">Open-Meteo</th><td>Météo du widget et du briefing</td><td>Le nom de la ville choisie, puis ses coordonnées</td></tr>
+            <tr><th scope="row">Flux RSS</th><td>Actualités IA, Tech, Dev et Monde (titre, résumé, lien)</td><td>Rien de personnel</td></tr>
+            <tr><th scope="row">Arena (LMArena)</th><td>Classement des modèles d'IA</td><td>Rien de personnel</td></tr>
+          </tbody>
+          <tbody>
+            <tr class="group-row"><th scope="colgroup" colspan="3">Paris fictifs<span class="asterisk" aria-hidden="true">*</span></th></tr>
+            <tr><th scope="row">ESPN</th><td>Résultats des matchs de tennis</td><td>La date demandée</td></tr>
+            <tr><th scope="row">The Odds API <span class="chip chip-sm">Facultatif</span></th><td>Matchs à venir et cotes</td><td>La clé et le nom des compétitions</td></tr>
+            <tr><th scope="row">Google Actualités</th><td>Titres récents lus par l'IA avant un pari</td><td>Le nom du joueur ou du tournoi</td></tr>
+          </tbody>
+        </table>
+        <p class="footnote">* Pour l'instant, les paris fictifs ne portent que sur le tennis. Le fichier tennis-data sert à régler et à tester le modèle sur les saisons passées&nbsp;; ESPN, The Odds API et Google Actualités alimentent les matchs à venir.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================== CONFIDENTIALITÉ ============================== -->
+  <section class="section" id="confidentialite" aria-labelledby="privacy-title">
+    <div class="container">
+      <header class="section-head reveal">
+        <p class="kicker">Confidentialité et architecture</p>
+        <h2 id="privacy-title">Vos données restent chez vous</h2>
+        <p class="section-lead">Paladon n'est pas un service en ligne&nbsp;: c'est une application que vous installez sur votre propre machine, et dont vous gardez la maîtrise.</p>
+      </header>
+
+      <figure class="card diagram reveal">
+        <figcaption class="visually-hidden">Schéma : vos appareils passent par un réseau privé chiffré pour joindre votre serveur. Sur ce serveur, Docker fait tourner l'interface, l'API et la base de données ; l'IA tourne en local. L'API lit seulement quelques services externes. Paladon n'est jamais exposé sur Internet.</figcaption>
+        <div class="flow" aria-hidden="true">
+          <div class="node">
+            <svg class="icon" focusable="false"><use href="#i-home"/></svg>
+            <p class="node-title">Vos appareils</p>
+            <p class="node-sub">Téléphone, ordinateur</p>
+          </div>
+          <div class="connector"><span class="packet"></span></div>
+          <div class="node">
+            <svg class="icon" focusable="false"><use href="#i-lock"/></svg>
+            <p class="node-title">Réseau privé</p>
+            <p class="node-sub">VPN chiffré, Tailscale par exemple</p>
+          </div>
+          <div class="connector"><span class="packet"></span></div>
+          <div class="node node-host">
+            <p class="node-title"><svg class="icon icon-inline" focusable="false"><use href="#i-server"/></svg>Votre serveur, chez vous</p>
+            <div class="host-inner">
+              <div class="group">
+                <p class="group-title">Docker</p>
+                <span class="pill">Interface</span>
+                <span class="pill">API</span>
+                <span class="pill">Base de données</span>
+              </div>
+              <div class="group">
+                <p class="group-title">IA locale</p>
+                <span class="pill pill-accent">Ollama</span>
+              </div>
+            </div>
+          </div>
+          <div class="connector connector-ext"><span class="packet"></span></div>
+          <div class="node node-ext">
+            <p class="node-title">Services externes</p>
+            <p class="node-sub">Lecture seule&nbsp;: cours, météo, actualités…</p>
+          </div>
+        </div>
+        <p class="diagram-note" aria-hidden="true">Paladon n'est jamais exposé sur Internet. Ce site de présentation est hébergé à part et ne voit aucune donnée.</p>
+      </figure>
+
+      <ul class="principles" role="list">
+        <li class="card principle reveal">
+          <h3>Auto-hébergé</h3>
+          <p>Paladon s'installe avec Docker sur la machine de votre choix&nbsp;: ordinateur, mini-PC ou serveur domestique. Les sauvegardes sont chiffrées.</p>
+        </li>
+        <li class="card principle reveal">
+          <h3>Accès privé</h3>
+          <p>Vous y accédez depuis vos appareils par un réseau privé chiffré. Aucune porte n'est ouverte sur Internet.</p>
+        </li>
+        <li class="card principle reveal">
+          <h3>Le code calcule, l'IA explique</h3>
+          <p>Chaque chiffre provient d'une fonction testée. Si un texte de l'IA contient un chiffre inventé, il est remplacé par le résumé du code.</p>
+        </li>
+        <li class="card principle reveal">
+          <h3>Aucune IA dans le cloud</h3>
+          <p>Le modèle d'IA tourne en local avec Ollama. Aucune de vos données n'est transmise à une IA en ligne.</p>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ============================== CONTACT ============================== -->
+  <section class="section" id="contact" aria-labelledby="contact-title">
+    <div class="container contact reveal">
+      <div class="contact-text">
+        <p class="kicker">Nous contacter</p>
+        <h2 id="contact-title">Intéressé&nbsp;? Une question, une suggestion&nbsp;?</h2>
+        <p>Paladon n'est pas encore distribué. S'il vous intéresse, dites-le-nous&nbsp;: cela nous aide à savoir s'il faut aller plus loin, et nous pourrons vous recontacter si une démonstration voit le jour.</p>
+        <p>Écrivez-nous&nbsp;: le formulaire ouvre votre messagerie avec votre message prêt à partir. Aucun serveur, rien n'est enregistré sur ce site.</p>
+        <p><a class="link" href="mailto:contact@paladon.net">contact@paladon.net</a></p>
+      </div>
+      <form class="card contact-form" id="contact-form" action="mailto:contact@paladon.net" method="post" enctype="text/plain" novalidate>
+        <fieldset class="field topic-group">
+          <legend>Votre message concerne</legend>
+          <div class="topic-options">
+            <label class="topic"><input type="radio" name="topic" value="Paladon m'intéresse" checked><span>Paladon m'intéresse</span></label>
+            <label class="topic"><input type="radio" name="topic" value="Une question"><span>Une question</span></label>
+            <label class="topic"><input type="radio" name="topic" value="Une suggestion"><span>Une suggestion</span></label>
+          </div>
+        </fieldset>
+        <div class="field">
+          <label for="cf-name">Votre nom <span class="optional">(facultatif)</span></label>
+          <input class="input" id="cf-name" name="name" type="text" autocomplete="name">
+        </div>
+        <div class="field">
+          <label for="cf-subject">Sujet <span class="optional">(facultatif)</span></label>
+          <input class="input" id="cf-subject" name="subject" type="text">
+        </div>
+        <div class="field">
+          <label for="cf-message">Message</label>
+          <textarea class="input textarea" id="cf-message" name="message" rows="5" required aria-describedby="cf-error"></textarea>
+        </div>
+        <p class="form-error" id="cf-error" role="alert"></p>
+        <button class="btn btn-primary" type="submit">
+          <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-mail"/></svg>
+          Ouvrir ma messagerie
+        </button>
+      </form>
+    </div>
+  </section>
+</main>
+
+<!-- ============================== PIED DE PAGE ============================== -->
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <div class="footer-brand">
+      <a class="brand" href="#haut" aria-label="Paladon, retour en haut de la page">
+        <svg class="logo" width="32" height="32" viewBox="0 0 36 36" aria-hidden="true" focusable="false"><rect class="logo-tile" width="36" height="36" rx="12"/><rect class="logo-ink" x="9" y="8" width="6" height="20" rx="3"/><circle class="logo-ring" cx="20.5" cy="15" r="5.5"/></svg>
+        <span class="wordmark wordmark-sm">Paladon</span>
+      </a>
+      <p>Le copilote du quotidien, auto-hébergé.</p>
+      <p class="muted">Site sans traceur ni cookie. Les chiffres affichés sont fictifs.</p>
+    </div>
+    <div>
+      <h2 class="footer-title">Crédits</h2>
+      <ul class="credits" role="list">
+        <li>Classement des IA&nbsp;: LMArena, licence CC&nbsp;BY&nbsp;4.0</li>
+        <li>Météo&nbsp;: Open-Meteo, licence CC&nbsp;BY&nbsp;4.0</li>
+        <li>Carte du monde&nbsp;: Natural Earth, domaine public</li>
+        <li>Police&nbsp;: Outfit, SIL Open Font License 1.1</li>
+        <li>Les autres marques citées appartiennent à leurs propriétaires.</li>
+      </ul>
+    </div>
+    <div>
+      <h2 class="footer-title">Mentions</h2>
+      <ul class="credits" role="list">
+        <li><a class="link" href="mentions-legales.html">Mentions légales</a></li>
+        <li><a class="link" href="#contact">Nous contacter</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

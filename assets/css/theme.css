@@ -1,0 +1,140 @@
+/* ==========================================================================================
+   Jetons de couleur des thèmes sombre et clair.
+   C'est le SEUL fichier du site qui contient des couleurs : tout le reste utilise var(--…).
+   Le sombre est la valeur par défaut ; le clair s'active avec data-theme="light" sur <html>.
+   ========================================================================================== */
+
+:root,
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --bg: #0c0e11;
+  --sidebar-bg: rgba(10, 12, 15, 0.95);
+  --sidebar-border: rgba(255, 255, 255, 0.08);
+  --tabbar-bg: rgba(28, 31, 36, 0.72);
+  --tabbar-border: rgba(255, 255, 255, 0.1);
+  --tabbar-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+  --card-bg: rgba(18, 21, 26, 0.98);
+  --card-solid: #12151a;
+  --card-border: rgba(255, 255, 255, 0.08);
+  --text: #eceff3;
+  --text-strong: #ffffff;
+  --text-body: #e3e8ee;
+  --text-secondary: #c3cad4;
+  --text-muted: #9ba3ae;
+  --nav-text: #b4bcc7;
+  --nav-active-bg: rgba(255, 255, 255, 0.09);
+  --nav-active-text: #ffffff;
+  --accent: #34d399;
+  --on-accent: #08110d;
+  --kpi-highlight: #34d399;
+  --bar: #34d399;
+  --danger: #f87171;
+  --danger-bar: #f87171;
+  --track: rgba(255, 255, 255, 0.09);
+  --divider: rgba(255, 255, 255, 0.1);
+  --control-bg: rgba(18, 21, 26, 0.85);
+  --control-border: rgba(255, 255, 255, 0.2);
+  --input-bg: rgba(255, 255, 255, 0.05);
+  --input-border: rgba(255, 255, 255, 0.22);
+  --chip-border: rgba(255, 255, 255, 0.25);
+  --placeholder: #9ba3ae;
+  --lift-shadow: 0 18px 40px rgba(0, 0, 0, 0.45);
+  --stripe-1: #11141a;
+  --stripe-2: #14181f;
+  --stripe-3: #181d25;
+  --stripe-hl: #11141a;
+  --stripe-tint: rgba(52, 211, 153, 0.035);
+  /* Intensité du fond à bandes */
+  --stripes-opacity: 0.5;
+
+  /* Étiquettes (tâches) : le texte de l'étiquette est toujours écrit */
+  --label-red: #f87171;
+  --label-orange: #fb923c;
+  --label-yellow: #facc15;
+  --label-green: #34d399;
+  --label-blue: #60a5fa;
+  --label-purple: #c084fc;
+  --label-gray: #9ba3ae;
+  /* Boutons de fenêtre des faux écrans (fermer, réduire, agrandir) */
+  --window-close: #ff5f57;
+  --window-minimize: #febc2e;
+  --window-zoom: #28c840;
+  /* Pictogrammes de catégories */
+  --cat-housing: #7dd3fc;
+  --cat-groceries: #bef264;
+  --cat-transport: #67e8f9;
+  --cat-leisure: #fcd34d;
+  /* Diagramme de flux */
+  --flow-income: #3987e5;
+  --flow-savings: #199e70;
+  --flow-c1: #c98500;
+  --flow-c2: #d55181;
+  --flow-c3: #9085e9;
+  --flow-c4: #17a2b8;
+  --flow-other: #6b7686;
+}
+
+:root[data-theme='light'] {
+  color-scheme: light;
+  --bg: #e6f1f0;
+  --sidebar-bg: rgba(255, 255, 255, 0.9);
+  --sidebar-border: rgba(15, 42, 46, 0.1);
+  --tabbar-bg: rgba(255, 255, 255, 0.75);
+  --tabbar-border: rgba(15, 42, 46, 0.1);
+  --tabbar-shadow: 0 10px 30px rgba(15, 42, 46, 0.15);
+  --card-bg: rgba(255, 255, 255, 0.98);
+  --card-solid: #ffffff;
+  --card-border: rgba(15, 42, 46, 0.08);
+  --text: #0f2a2e;
+  --text-strong: #0f2a2e;
+  --text-body: #1d3a3e;
+  --text-secondary: #2f4a4e;
+  --text-muted: #4f6a6e;
+  --nav-text: #2f4a4e;
+  --nav-active-bg: rgba(11, 107, 106, 0.14);
+  --nav-active-text: #0a3c3d;
+  --accent: #0b6b6a;
+  --on-accent: #ffffff;
+  --kpi-highlight: #0f2a2e;
+  --bar: #2e8f8c;
+  --danger: #a93b22;
+  --danger-bar: #d9573a;
+  --track: rgba(15, 42, 46, 0.1);
+  --divider: rgba(15, 42, 46, 0.12);
+  --control-bg: rgba(255, 255, 255, 0.7);
+  --control-border: rgba(15, 42, 46, 0.25);
+  --input-bg: #ffffff;
+  --input-border: rgba(15, 42, 46, 0.28);
+  --chip-border: rgba(15, 42, 46, 0.3);
+  --placeholder: #4f6a6e;
+  --lift-shadow: 0 18px 40px rgba(15, 42, 46, 0.18);
+  --stripe-1: #e0edec;
+  --stripe-2: #daeae8;
+  --stripe-3: #d3e5e3;
+  --stripe-hl: rgba(255, 255, 255, 0.4);
+  --stripe-tint: rgba(255, 201, 163, 0.2);
+  --stripes-opacity: 0.35;
+
+  --label-red: #a93b22;
+  --label-orange: #9a4a00;
+  --label-yellow: #7a5b00;
+  --label-green: #0b6b4a;
+  --label-blue: #1d4f9c;
+  --label-purple: #6b3fa0;
+  --label-gray: #4f6a6e;
+  --window-close: #ff5f57;
+  --window-minimize: #febc2e;
+  --window-zoom: #28c840;
+  /* Teintes foncées du thème clair */
+  --cat-housing: #0369a1;
+  --cat-groceries: #4d7c0f;
+  --cat-transport: #0e7490;
+  --cat-leisure: #92400e;
+  --flow-income: #3987e5;
+  --flow-savings: #199e70;
+  --flow-c1: #c98500;
+  --flow-c2: #d55181;
+  --flow-c3: #9085e9;
+  --flow-c4: #17a2b8;
+  --flow-other: #6b7686;
+}
