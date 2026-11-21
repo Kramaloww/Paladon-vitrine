@@ -1,8 +1,4 @@
-<p align="center">
-  <img src="assets/img/favicon.svg" width="96" height="96" alt="Logo Paladon">
-</p>
-
-# Paladon — site de présentation
+# <img src="assets/img/favicon.svg" width="36" height="36" align="absmiddle" alt="Logo Paladon"> Paladon — site de présentation
 
 Site statique (HTML, CSS, JavaScript), sans dépendance ni étape de build.
 
