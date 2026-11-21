@@ -1945,6 +1945,16 @@ h1 {
   color: var(--danger) !important;
   font-weight: 500;
 }
+.footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 24px;
+}
+.footer-links .link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+}
 .footer-simple {
   display: flex;
   flex-wrap: wrap;
