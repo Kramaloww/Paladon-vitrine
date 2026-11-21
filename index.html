@@ -887,6 +887,15 @@
           <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-mail"/></svg>
           Ouvrir ma messagerie
         </button>
+        <div class="mail-fallback" id="cf-fallback" hidden>
+          <p>Votre messagerie ne s'est pas ouverte&nbsp;? Envoyez le message depuis votre webmail, ou copiez-le et écrivez à <a class="link" href="mailto:contact@paladon.net">contact@paladon.net</a>.</p>
+          <div class="fallback-actions">
+            <a class="btn btn-secondary btn-sm" id="cf-gmail" href="#" target="_blank" rel="noopener noreferrer">Ouvrir dans Gmail</a>
+            <a class="btn btn-secondary btn-sm" id="cf-outlook" href="#" target="_blank" rel="noopener noreferrer">Ouvrir dans Outlook.com</a>
+            <button class="btn btn-secondary btn-sm" type="button" id="cf-copy">Copier le message</button>
+          </div>
+          <p class="copy-status" id="cf-copy-status" role="status"></p>
+        </div>
       </form>
     </div>
   </section>

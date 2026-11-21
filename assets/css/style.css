@@ -1611,6 +1611,38 @@ h1 {
   align-self: flex-start;
 }
 
+/* Solutions de secours si la messagerie ne s'ouvre pas */
+.mail-fallback {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px 18px;
+  border: 1px solid var(--chip-border);
+  border-radius: 20px;
+  font-size: 15px;
+  color: var(--text-body);
+}
+.fallback-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.contact-form .fallback-actions .btn {
+  align-self: auto;
+}
+.btn-sm {
+  min-height: 44px;
+  padding: 0 18px;
+  font-size: 15px;
+}
+.copy-status {
+  font-size: 14px;
+  color: var(--accent);
+}
+.copy-status:empty {
+  display: none;
+}
+
 /* ---------- Pied de page ---------- */
 .site-footer {
   padding: 56px 0 64px;

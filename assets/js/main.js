@@ -9,8 +9,8 @@
   var isEnglish = (root.getAttribute('lang') || 'fr').slice(0, 2) === 'en'
   var LOCALE = isEnglish ? 'en-US' : 'fr-FR'
   var T = isEnglish
-    ? { switchTo: 'Switch to ', light: 'light theme', dark: 'dark theme', lightShort: 'Light', darkShort: 'Dark', needMessage: 'Please write your message.' }
-    : { switchTo: 'Passer au thème ', light: 'clair', dark: 'sombre', lightShort: 'Clair', darkShort: 'Sombre', needMessage: 'Merci d’écrire votre message.' }
+    ? { switchTo: 'Switch to ', light: 'light theme', dark: 'dark theme', lightShort: 'Light', darkShort: 'Dark', needMessage: 'Please write your message.', copied: 'Message copied. Paste it into an email to contact@paladon.net.', copyFailed: 'Copy failed: please select the text of your message manually.', to: 'To', subject: 'Subject' }
+    : { switchTo: 'Passer au thème ', light: 'clair', dark: 'sombre', lightShort: 'Clair', darkShort: 'Sombre', needMessage: 'Merci d’écrire votre message.', copied: 'Message copié. Collez-le dans un e-mail à contact@paladon.net.', copyFailed: 'La copie a échoué : sélectionnez le texte de votre message à la main.', to: 'À', subject: 'Sujet' }
   var THEME_KEY = 'paladon-vitrine-theme'
   var reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)')
   var systemLight = window.matchMedia('(prefers-color-scheme: light)')
@@ -297,6 +297,20 @@
   var form = document.getElementById('contact-form')
   var error = document.getElementById('cf-error')
   var CONTACT_EMAIL = 'contact@paladon.net'
+  var fallback = document.getElementById('cf-fallback')
+  var copyStatus = document.getElementById('cf-copy-status')
+  var copyText = ''
+
+  // « Copier le message » : presse-papiers du navigateur (rien n'est envoyé)
+  var copyButton = document.getElementById('cf-copy')
+  if (copyButton) copyButton.addEventListener('click', function () {
+    function done(ok) { copyStatus.textContent = ok ? T.copied : T.copyFailed }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(copyText).then(function () { done(true) }, function () { done(false) })
+    } else {
+      done(false)
+    }
+  })
 
   if (form) form.addEventListener('submit', function (event) {
     event.preventDefault()
@@ -319,6 +333,19 @@
     // Sujet du courriel : [Paladon] + objet choisi (+ précision éventuelle), pour trier facilement
     var mailSubject = '[Paladon] ' + topic + (subject ? ' : ' + subject : '')
     var body = message.value.trim() + (name ? '\n\n' + name : '')
+
+    // Solutions de secours, affichées sous le bouton : si aucun logiciel de mail n'est associé
+    // aux liens mailto: (fréquent avec un webmail), le clic ne fait rien. On propose alors
+    // Gmail, Outlook.com ou la copie du message. Ces sites ne sont contactés que si on clique.
+    var enc = encodeURIComponent
+    document.getElementById('cf-gmail').href =
+      'https://mail.google.com/mail/?view=cm&fs=1&to=' + enc(CONTACT_EMAIL) + '&su=' + enc(mailSubject) + '&body=' + enc(body)
+    document.getElementById('cf-outlook').href =
+      'https://outlook.live.com/mail/0/deeplink/compose?to=' + enc(CONTACT_EMAIL) + '&subject=' + enc(mailSubject) + '&body=' + enc(body)
+    copyText = T.to + ' : ' + CONTACT_EMAIL + '\n' + T.subject + ' : ' + mailSubject + '\n\n' + body
+    copyStatus.textContent = ''
+    fallback.hidden = false
+
     window.location.href =
       'mailto:' +
       CONTACT_EMAIL +

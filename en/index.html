@@ -887,6 +887,15 @@
           <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-mail"/></svg>
           Open my email app
         </button>
+        <div class="mail-fallback" id="cf-fallback" hidden>
+          <p>Your email app didn't open? Send the message from your webmail, or copy it and write to <a class="link" href="mailto:contact@paladon.net">contact@paladon.net</a>.</p>
+          <div class="fallback-actions">
+            <a class="btn btn-secondary btn-sm" id="cf-gmail" href="#" target="_blank" rel="noopener noreferrer">Open in Gmail</a>
+            <a class="btn btn-secondary btn-sm" id="cf-outlook" href="#" target="_blank" rel="noopener noreferrer">Open in Outlook.com</a>
+            <button class="btn btn-secondary btn-sm" type="button" id="cf-copy">Copy the message</button>
+          </div>
+          <p class="copy-status" id="cf-copy-status" role="status"></p>
+        </div>
       </form>
     </div>
   </section>
