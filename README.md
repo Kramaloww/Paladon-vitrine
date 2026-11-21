@@ -1,5 +1,7 @@
 # <img src="assets/img/favicon.svg" width="36" height="36" align="absmiddle" alt="Logo Paladon"> Paladon
 
+**Français** · [English](README.en.md)
+
 **Le copilote du quotidien qui reste chez vous.**
 
 Paladon réunit vos finances, vos placements, vos actualités, vos tâches et vos alertes dans une seule application. Installée sur votre propre machine et épaulée par une IA locale, elle garde vos données là où elles doivent être : chez vous.
