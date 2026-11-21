@@ -17,7 +17,7 @@ Paladon brings your finances, investments, news, tasks and alerts together in a 
 
 ## Status
 
-Paladon is a personal project and is not available yet. The app is currently in French only.
+Paladon is a **non-commercial** personal project: the app is not for sale and not available yet. This site is here to find out whether there is real demand for it. The app is currently in French only.
 Interested? Write to us at **contact@paladon.net**.
 
 ---

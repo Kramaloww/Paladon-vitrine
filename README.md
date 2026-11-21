@@ -17,7 +17,7 @@ Paladon réunit vos finances, vos placements, vos actualités, vos tâches et vo
 
 ## Statut
 
-Paladon est un projet personnel, pas encore distribué. L'application est pour l'instant en français.
+Paladon est un projet personnel **sans but commercial** : l'application n'est pas à vendre ni encore distribuée. Ce site sert à savoir si elle répond à une vraie demande. L'application est pour l'instant en français.
 Intéressé ? Écrivez-nous à **contact@paladon.net**.
 
 ---

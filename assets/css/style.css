@@ -553,6 +553,16 @@ h1 {
   margin-top: 32px;
 }
 
+.hero-note {
+  max-width: 620px;
+  margin: 20px auto 0;
+  font-size: 15px;
+  color: var(--text-secondary);
+}
+.hero-note strong {
+  font-weight: 600;
+  color: var(--text-strong);
+}
 .hero-preview {
   margin-top: 64px;
 }
