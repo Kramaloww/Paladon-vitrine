@@ -145,27 +145,37 @@ svg {
   pointer-events: none;
   opacity: var(--stripes-opacity);
 }
-/* Chaque bande glisse le long de sa propre direction, à des vitesses différentes.
-   Déplacement de ±140 px en 24 à 36 s : visible mais calme, jamais gênant pour la lecture. */
+/* Chaque bande glisse le long de sa propre direction, à vitesse constante (pas de départ
+   arrêté) et décalée des autres : il y a toujours du mouvement, lent et régulier.
+   Environ 12 à 16 px par seconde ; coupé par prefers-reduced-motion. */
 .stripes rect {
-  animation: stripe-drift 24s ease-in-out infinite alternate;
+  animation: stripe-drift 22s linear infinite alternate;
 }
 .stripes rect:nth-child(3n + 2) {
-  animation-duration: 30s;
+  animation-duration: 27s;
   animation-direction: alternate-reverse;
 }
 .stripes rect:nth-child(3n) {
-  animation-duration: 36s;
+  animation-duration: 32s;
 }
-.stripes rect:nth-child(4n) {
-  animation-delay: -12s;
-}
+.stripes rect:nth-child(2) { animation-delay: -7s; }
+.stripes rect:nth-child(3) { animation-delay: -19s; }
+.stripes rect:nth-child(4) { animation-delay: -4s; }
+.stripes rect:nth-child(5) { animation-delay: -13s; }
+.stripes rect:nth-child(6) { animation-delay: -22s; }
+.stripes rect:nth-child(7) { animation-delay: -9s; }
+.stripes rect:nth-child(8) { animation-delay: -16s; }
+.stripes rect:nth-child(9) { animation-delay: -2s; }
+.stripes rect:nth-child(10) { animation-delay: -25s; }
+.stripes rect:nth-child(11) { animation-delay: -11s; }
+.stripes rect:nth-child(12) { animation-delay: -18s; }
+.stripes rect:nth-child(13) { animation-delay: -6s; }
 @keyframes stripe-drift {
   from {
-    transform: translateX(-140px);
+    transform: translateX(-170px);
   }
   to {
-    transform: translateX(140px);
+    transform: translateX(170px);
   }
 }
 
@@ -1411,7 +1421,8 @@ h1 {
 .node-host {
   flex: 1 1 auto;
   max-width: none;
-  border-color: var(--accent);
+  /* 2 px : un trait de 1 px placé entre deux pixels paraît pâle sous Safari */
+  border: 2px solid var(--accent);
 }
 .host-inner {
   display: flex;
